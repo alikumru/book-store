@@ -1,6 +1,7 @@
 package com.manage.bookstore.statistic;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import javax.persistence.*;
 @Entity(name = "STATISTICS")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Statistic {
 
     @Id

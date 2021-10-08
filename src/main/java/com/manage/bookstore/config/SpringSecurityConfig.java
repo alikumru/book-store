@@ -18,11 +18,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
     private JwtFilter jwtFilter;
+    private UserService userService;
 
     @Autowired
-    private UserService userService;
+    public SpringSecurityConfig(JwtFilter jwtFilter, UserService userService) {
+        this.jwtFilter = jwtFilter;
+        this.userService = userService;
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -32,8 +35,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-                .authorizeRequests().antMatchers("/api/user/login").permitAll()
-                .antMatchers( "/swagger-ui/*","/v3/api-docs/**","/configuration/ui/*","/swagger-resources/**","/configuration/security","/webjars/**","/h2-console/**").permitAll()
+                .authorizeRequests().antMatchers("/api/user/login", "/api/user/register").permitAll()
+                .antMatchers("/swagger-ui/*", "/v3/api-docs/**", "/configuration/ui/*", "/swagger-resources/**", "/configuration/security", "/webjars/**", "/h2-console/**").permitAll()
                 .anyRequest().authenticated()
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS); // ***

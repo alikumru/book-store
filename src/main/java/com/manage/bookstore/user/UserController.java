@@ -2,7 +2,11 @@ package com.manage.bookstore.user;
 
 import com.manage.bookstore.exception.RegistrationException;
 import com.manage.bookstore.jwt.JwtUtil;
+import com.manage.bookstore.response.ErrorResponse;
+import com.manage.bookstore.response.SuccessResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Date;
 
 @RestController
 @RequestMapping(UserController.USER_PATH)
@@ -45,14 +51,17 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public void register(@RequestBody User user) throws Exception, RegistrationException {
+    public ResponseEntity<Object> register(@RequestBody User user) throws Exception, RegistrationException {
         try {
             userService.registerUser(user);
-        } catch (RegistrationException e) {
-
+        } catch (RegistrationException registrationException) {
+            return new ResponseEntity<>(new ErrorResponse(registrationException.getErrorCode(), registrationException.getMessage()),
+                    HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-
+            return new ResponseEntity<>(new ErrorResponse("-1", e.getMessage()),
+                    HttpStatus.BAD_REQUEST);
         }
+        return new ResponseEntity<Object>(new SuccessResponse("Register Successfull!", new Date()), HttpStatus.OK);
     }
 
 }

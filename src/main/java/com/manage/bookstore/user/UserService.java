@@ -1,5 +1,6 @@
 package com.manage.bookstore.user;
 
+import com.manage.bookstore.book.Book;
 import com.manage.bookstore.exception.RegistrationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,7 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.Optional;
+import java.util.ArrayList;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -22,19 +23,17 @@ public class UserService implements UserDetailsService {
 
     @PostConstruct
     private void createLoginUser() {
-        User user = new User();
-        user.setEmail("alikmru@gmail.com");
-        user.setUsername("alikumru");
-        user.setPassword("ali123");
-        user.setPhone("05071836262");
-        userRepository.save(user);
+        userRepository.save(new User("ali1", "ali123", "kumru4290@hotmail.com", "05071836262"));
+        userRepository.save(new User("ali2", "ali123", "kumru4291@hotmail.com", "05071836262"));
+        userRepository.save(new User("ali3", "ali123", "kumru4292@hotmail.com", "05071836262"));
+        userRepository.save(new User("ali4", "ali123", "kumru4293@hotmail.com", "05071836262"));
     }
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findById(Long.valueOf(1));
-
-        return null;
+        User user = userRepository.findById(Long.valueOf(1)).get();
+        org.springframework.security.core.userdetails.User loginUser = new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), new ArrayList<>());
+        return loginUser;
     }
 
     public void registerUser(User user) throws RegistrationException {

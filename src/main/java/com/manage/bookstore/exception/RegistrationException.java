@@ -1,5 +1,8 @@
 package com.manage.bookstore.exception;
 
+import lombok.Getter;
+
+@Getter
 public class RegistrationException extends Exception{
 
     private String errorCode;

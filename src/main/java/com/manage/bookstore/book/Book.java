@@ -1,24 +1,30 @@
 package com.manage.bookstore.book;
 
-import com.manage.bookstore.author.Author;
+import com.manage.bookstore.order.Order;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity(name = "BOOKS")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Book {
 
     @Id
-    @Column(name = "book_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "BOOK_ID", nullable = false)
     private Long id;
     private String name;
+    private int quantity;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
-    private List<Author> authors;
+    @ManyToMany(mappedBy = "ordered_books")
+    Set<Order> orders;
 
-
+    public Book(String name) {
+        this.name = name;
+    }
 }
