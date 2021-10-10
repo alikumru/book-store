@@ -1,14 +1,14 @@
 package com.manage.bookstore.order;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.manage.bookstore.book.Book;
-import com.manage.bookstore.customer.Customer;
 import com.manage.bookstore.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import javax.persistence.*;
 import java.sql.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity(name = "ORDERS")
@@ -28,9 +28,9 @@ public class Order {
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "books_ordered",
+            name = "BOOKS_ORDERED",
             joinColumns = @JoinColumn(name = "ORDER_ID"),
             inverseJoinColumns = @JoinColumn(name = "BOOK_ID"))
     Set<Book> ordered_books;

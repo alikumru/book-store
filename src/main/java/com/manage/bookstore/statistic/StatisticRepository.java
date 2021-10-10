@@ -1,4 +1,4 @@
 package com.manage.bookstore.statistic;
 
-public class StatisticRepository {
+public interface StatisticRepository {
 }

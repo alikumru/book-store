@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -39,14 +40,22 @@ public class UserService implements UserDetailsService {
     public void registerUser(User user) throws RegistrationException {
 
         if (user.getEmail() == null)
-            throw new RegistrationException("1001", "User email can not be empty");
+            throw new RegistrationException("2001", "User email can not be empty");
         if (user.getUsername() == null)
-            throw new RegistrationException("1001", "Username can not be empty");
+            throw new RegistrationException("2002", "Username can not be empty");
         if (user.getPassword() == null)
-            throw new RegistrationException("1001", "Password can not be empty");
+            throw new RegistrationException("2003", "Password can not be empty");
         if (user.getPhone() == null)
-            throw new RegistrationException("1001", "Phone can not be empty");
+            throw new RegistrationException("2004", "Phone can not be empty");
 
         userRepository.save(user);
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAllUsers();
+    }
+
+    public User findUserById(long userId) {
+        return userRepository.findById(userId).get();
     }
 }

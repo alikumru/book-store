@@ -1,13 +1,13 @@
 package com.manage.bookstore.user;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.manage.bookstore.order.Order;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -25,8 +25,10 @@ public class User {
     private String email;
     private String phone;
 
-    @OneToMany(mappedBy = "user")
-    private Set<Order> orders = new HashSet<>();
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    @JsonBackReference
+    private List<Order> orders;
 
     public User(String username, String password, String email, String phone) {
         this.username = username;

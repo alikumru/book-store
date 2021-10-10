@@ -3,13 +3,12 @@ package com.manage.bookstore.response;
 import lombok.Getter;
 
 @Getter
-public class ErrorResponse {
+public class ErrorResponse extends Response {
 
     private String errorCode;
-    private String errorMessage;
 
-    public ErrorResponse(String errorCode, String errorMessage) {
+    public ErrorResponse(String errorCode, String errorMessage, Object body) {
+        super(errorMessage, body);
         this.errorCode = errorCode;
-        this.errorMessage = errorMessage;
     }
 }

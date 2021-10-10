@@ -1,9 +1,7 @@
 package com.manage.bookstore.book;
 
 import com.manage.bookstore.order.Order;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -19,12 +17,15 @@ public class Book {
     @Column(name = "BOOK_ID", nullable = false)
     private Long id;
     private String name;
-    private int quantity;
+    private int pageNumber;
+    private int stock;
+    @Column(columnDefinition="Decimal(10,2)")
+    private double price;
 
-    @ManyToMany(mappedBy = "ordered_books")
-    Set<Order> orders;
-
-    public Book(String name) {
+    public Book(String name, int pageNumber, int stock, double price) {
         this.name = name;
+        this.pageNumber = pageNumber;
+        this.stock = stock;
+        this.price = price;
     }
 }

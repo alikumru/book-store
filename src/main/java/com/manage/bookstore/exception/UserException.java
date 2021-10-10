@@ -1,10 +1,10 @@
 package com.manage.bookstore.exception;
 
-public class BookStoreException extends Exception {
+public class UserException extends Exception{
 
     private String errorCode;
 
-    public BookStoreException(String errorMessage, String errorCode) {
+    public UserException(String errorMessage, String errorCode) {
         super(errorMessage);
         this.errorCode = errorCode;
     }

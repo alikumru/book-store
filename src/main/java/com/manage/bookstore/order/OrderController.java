@@ -3,13 +3,18 @@ package com.manage.bookstore.order;
 import com.manage.bookstore.book.Book;
 import com.manage.bookstore.book.BookService;
 import com.manage.bookstore.exception.OrderException;
+import com.manage.bookstore.response.ErrorResponse;
+import com.manage.bookstore.response.Response;
+import com.manage.bookstore.response.SuccessResponse;
 import com.manage.bookstore.statistic.StatisticController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.util.Calendar;
+import java.util.List;
 
 @RestController
 @RequestMapping(OrderController.ORDER_PATH)
@@ -17,33 +22,40 @@ public class OrderController {
 
     public static final String ORDER_PATH = "/api/order";
     private OrderService orderService;
-    private BookService bookService;
 
     @Autowired
     public OrderController(OrderService orderService, BookService bookService) {
         this.orderService = orderService;
-        this.bookService = bookService;
-    }
-
-    @GetMapping(path = "")
-    public ResponseEntity<Order> getAllOrders() {
-        System.out.println("Get Request");
-        return null;
     }
 
     @GetMapping(path = "/{user-id}")
-    public ResponseEntity<Order> getOrdersByUser(@PathVariable(name = "user-id") String userId) {
-        System.out.println("Get Request With Path Variable");
-        return null;
+    public ResponseEntity<Response> OrdersByUser(@PathVariable(name = "user-id") long userId) throws OrderException {
+        List<Order> order = orderService.getOrdersByUser(userId);
+        if (order == null) {
+            ErrorResponse errorResponse = new ErrorResponse("1008", null, "Order could not found!");
+            new ResponseEntity<Object>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
+        Response successResponse = new SuccessResponse("Orders retrieved successully!", new Date(Calendar.getInstance().getTimeInMillis()), order);
+        return new ResponseEntity<Response>(successResponse, HttpStatus.OK);
     }
 
     @PostMapping(path = "")
-    public ResponseEntity<Order> createOrder(@RequestBody Order order) throws OrderException {
-        if(order == null)
-            return null;
-
-        order.setOrderDate(new Date(Calendar.getInstance().getTimeInMillis()));
-        orderService.createOrder(order);
-        return null;
+    public ResponseEntity<Response> createOrder(@RequestBody Order order) throws OrderException {
+        try {
+            if (order == null) {
+                ErrorResponse errorResponse = new ErrorResponse("1001", null, "Order object can not be empty!");
+                return new ResponseEntity<Response>(errorResponse, HttpStatus.OK);
+            }
+            order.setOrderDate(new Date(Calendar.getInstance().getTimeInMillis()));
+            orderService.createOrder(order);
+        } catch (OrderException orderException) {
+            ErrorResponse errorResponse = new ErrorResponse("1001", null, orderException.getMessage());
+            return new ResponseEntity<Response>(errorResponse, HttpStatus.OK);
+        } catch (Exception exception) {
+            ErrorResponse errorResponse = new ErrorResponse("1001", null, exception.getMessage());
+            return new ResponseEntity<Response>(errorResponse, HttpStatus.OK);
+        }
+        Response successResponse = new SuccessResponse("Order created successully!", new Date(Calendar.getInstance().getTimeInMillis()), null);
+        return new ResponseEntity<Response>(successResponse, HttpStatus.OK);
     }
 }

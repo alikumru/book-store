@@ -6,13 +6,12 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class SuccessResponse {
+public class SuccessResponse extends Response{
 
-    private String message;
     private Date date;
 
-    public SuccessResponse(String message, Date date) {
-        this.message = message;
+    public SuccessResponse(String message, Date date,Object body) {
+        super(message,body);
         this.date = date;
     }
 }
