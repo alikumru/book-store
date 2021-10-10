@@ -1,6 +1,8 @@
 package com.manage.bookstore.book;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.manage.bookstore.order.Order;
+import com.manage.bookstore.order.OrderDetails;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,6 +23,11 @@ public class Book {
     private int stock;
     @Column(columnDefinition="Decimal(10,2)")
     private double price;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "BOOK_ID")
+    @JsonBackReference
+    private Set<OrderDetails> orderDetails;
 
     public Book(String name, int pageNumber, int stock, double price) {
         this.name = name;

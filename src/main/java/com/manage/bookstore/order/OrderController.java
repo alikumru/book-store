@@ -39,6 +39,17 @@ public class OrderController {
         return new ResponseEntity<Response>(successResponse, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/{user-id}/{order-id}")
+    public ResponseEntity<Response> OrdersByUserWithDetails(@PathVariable(name = "user-id") long userId,@PathVariable(name = "order-id") long orderId) throws OrderException {
+        List<Order> orderDetails = orderService.findOrdersByUserWithDetails(userId,orderId);
+        if (orderDetails == null) {
+            ErrorResponse errorResponse = new ErrorResponse("1008", null, "Order could not found!");
+            new ResponseEntity<Object>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
+        Response successResponse = new SuccessResponse("Orders retrieved successully!", new Date(Calendar.getInstance().getTimeInMillis()), orderDetails);
+        return new ResponseEntity<Response>(successResponse, HttpStatus.OK);
+    }
+
     @PostMapping(path = "")
     public ResponseEntity<Response> createOrder(@RequestBody Order order) throws OrderException {
         try {

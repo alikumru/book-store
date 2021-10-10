@@ -45,10 +45,26 @@ public class StatisticController {
         return new ResponseEntity<Response>(new SuccessResponse("Orders retrieved successfully", new Date(), orders), HttpStatus.OK);
     }
 
+    @GetMapping(path = "/monthly/")
+    public ResponseEntity<Response> getAllMonthlyStatistic() throws ParseException {
+
+        return new ResponseEntity<Response>(new SuccessResponse("Orders retrieved successfully", new Date(), null), HttpStatus.OK);
+    }
+
     @GetMapping(path = "/monthly/{month}")
     public ResponseEntity<Response> getMonthlyStatistic(@PathVariable(name = "month") String month) throws ParseException {
 
         return new ResponseEntity<Response>(new SuccessResponse("Orders retrieved successfully", new Date(), null), HttpStatus.OK);
     }
 
+    @GetMapping(path = "/monthly", params = {"since"})
+    public ResponseEntity<Response> getMonthlyStatisticSince(@RequestParam(name = "since") String since) throws ParseException {
+        return new ResponseEntity<Response>(new SuccessResponse("Orders retrieved successfully", new Date(), null), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/monthly", params = {"since", "to"})
+    public ResponseEntity<Response> getMonthlyStatisticSinceTo(@RequestParam(name = "since") String since, @RequestParam(name = "to") String to) throws ParseException {
+
+        return new ResponseEntity<Response>(new SuccessResponse("Orders retrieved successfully", new Date(), null), HttpStatus.OK);
+    }
 }

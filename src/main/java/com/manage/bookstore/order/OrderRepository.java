@@ -17,6 +17,11 @@ public interface OrderRepository extends CrudRepository<Order, Long> {
     List<Order> findOrdersByUser(@Param("id") Long id);
 
     @Query(
+            value = "SELECT * FROM ORDERS u WHERE u.USER_ID = :id AND u.ORDER_ID = :orderId",
+            nativeQuery = true)
+    List<Order> findOrdersByUserWithDetails(@Param("id") Long id,@Param("orderId") Long orderId);
+
+    @Query(
             value = "SELECT * FROM ORDERS u WHERE u.USER_ID = :id AND u.ORDER_DATE >= :since",
             nativeQuery = true)
     List<Order> findUserOrdersSince(@Param("id") Long id, @Param("since") Date since);
