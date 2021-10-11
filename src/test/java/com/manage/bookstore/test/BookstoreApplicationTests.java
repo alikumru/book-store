@@ -52,6 +52,7 @@ class BookstoreApplicationTests {
     @Test
     public void testAllOrdersOfCustomer() throws Exception {
         List<Order> orders = orderService.getOrdersByUser(2);
+        assertNotNull(orders);
     }
 
     @Test

@@ -7,6 +7,7 @@ import com.manage.bookstore.response.Response;
 import com.manage.bookstore.response.SuccessResponse;
 import com.manage.bookstore.user.UserController;
 import com.manage.bookstore.util.DateUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +23,12 @@ public class StatisticController {
 
     public static final String STATISTIC_PATH = "/api/statistic";
     private OrderService orderService;
+    private StatisticService statisticService;
 
-    public StatisticController(OrderService orderService) {
+    @Autowired
+    public StatisticController(OrderService orderService, StatisticService statisticService) {
         this.orderService = orderService;
+        this.statisticService = statisticService;
     }
 
     @GetMapping(path = "/{user-id}")
@@ -46,9 +50,9 @@ public class StatisticController {
     }
 
     @GetMapping(path = "/monthly/")
-    public ResponseEntity<Response> getAllMonthlyStatistic() throws ParseException {
-
-        return new ResponseEntity<Response>(new SuccessResponse("Orders retrieved successfully", new Date(), null), HttpStatus.OK);
+    public ResponseEntity<Response> getAllMonthlyStatistic(@RequestParam(name = "user-id") long userId) throws ParseException {
+        List<Object> monthlyReport = statisticService.getMonthlyReport(userId);
+        return new ResponseEntity<Response>(new SuccessResponse("Orders retrieved successfully", new Date(), monthlyReport), HttpStatus.OK);
     }
 
     @GetMapping(path = "/monthly/{month}")
